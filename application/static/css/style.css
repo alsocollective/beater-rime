@@ -1,0 +1,44 @@
+html,body{
+	padding: 0;
+	margin: 0;
+	font-family: 'Lato', sans-serif;
+}
+select,button,input,textarea{
+	display: block;
+	border: 0 !important;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	text-indent: 0.01px;
+	text-overflow: "";
+
+	font-family: 'Lato', sans-serif;
+	background: #fff;
+	font-size: 1.2em;
+	border-radius: 0;
+	border:none;
+	padding: 10px 15px;
+	background-color: #fff;
+	box-shadow: 5px 5px 5px #cccccc;
+	-webkit-transition: all 0.5s;
+	-moz-transition: all 0.5s;
+	-ms-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	transition: all 0.5s;
+	vertical-align: top;
+	margin: 10px auto 10px auto;
+}
+
+
+#wrapper{
+	text-align: center;
+}
+#time{
+	display: none;
+	text-align: center;
+}
+.working #time{
+	display: block;
+}
+.working #notes,.working #project,#datetime{
+	display: none;
+}

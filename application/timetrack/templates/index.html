@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+	{% if error %}
+		<div class="error">{{error}}</div>
+	{% endif %}
+
+	<form action="/api/starttimmer" method="post">{% csrf_token %}
+		<select id="user" name="name">
+			{% for user in users %}
+				<option value="{{user.pk}}">{{user}}</option>
+			{% endfor %}
+		</select>
+		<select id="project" name="project">
+			{% for project in projects %}
+				<option value="{{project.pk}}">{{project}}</option>
+			{% endfor %}
+		</select>
+		<textarea id="notes" name="task"></textarea>
+		<input type="text" name="time" id="datetime">
+		<input type="submit" value="Submit" id="start">
+	</form>
+	<div id="time">
+		<div id="currenttime" ></div>
+		<div id="starttime" ></div>
+		<div id="worked"></div>
+	</div>
+{% endblock %}
+
+
+
+{% block script %}
+	<script type="text/javascript">
+	$(document).ready(function(){
+		app.init();
+	});
+	</script>
+{% endblock %}
