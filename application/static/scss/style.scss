@@ -3,6 +3,7 @@ html,body{
 	margin: 0;
 	font-family: 'Lato', sans-serif;
 }
+
 select,button,.formated input,textarea{
 	border: 0 !important;
 	-webkit-appearance: none;
@@ -27,19 +28,25 @@ select,button,.formated input,textarea{
 	margin: 10px auto 10px auto;
 }
 
-.worktypes{
-	width: 50%;
-	margin: 0 auto;
-	text-align: center;
-}
-.worktypes .worktypecontainer{
-	display: inline-block;
-	padding: 0.5em 1em;
-}
 
 #wrapper{
 	text-align: center;
 }
+
+.worktypes{
+	width: 50%;
+	margin: 0 auto;
+	text-align: center;
+	.worktypecontainer{
+		display: inline-block;
+		padding: 0.5em 1em;
+		input{
+			margin: 0.6em;
+		}
+	}
+}
+
+
 
 #user,#project,#notes{
 	display: block;
@@ -49,62 +56,63 @@ select,button,.formated input,textarea{
 	display: none;
 	text-align: center;
 }
-.working #time{
-	display: block;
-}
 
 
-#finish{
-	display: none;
-}
-.working #finish{
-	display: inline-block;
-}
-
-
-.working #notes,.working #project,#datetime,.working .worktypecontainer,.working #start{
+#finish,.pause,#datetime,.notloaded{
 	display: none;
 }
 
 
-.pause{
-	display: none;
-}
-.working .pause{
-	display: block;
+.working{
+	#time{
+		display: block;
+	}
+	#finish{
+		display: inline-block;
+	}
+	#notes,#project,.worktypecontainer,#start{
+		display: none;
+	}
+	.pause{
+		display: block;
+		input{
+			display:none;
+		}
+	}
+
 }
 
 .pausebutton{
 	display: none;
 }
-.paused.working #unpausebutton{
-	display: inline-block;
+.paused.working {
+	#unpausebutton{
+		display: inline-block;
+	}
+	#pausebutton{
+		display: none;
+	}
+	#time{
+		display: none;
+	}	
 }
-.paused.working #pausebutton{
-	display: none;
-}
+
 .working #pausebutton{
 	display: inline-block;
 }
 
 
-.notloaded{
-	display: none;
-}
-
-
-.paused.working #time{
-	display: none;
-}
 .pausedtext{
 	display: none;
 }
-.paused .pausedtext{
-	display: block;
-}
-.pause input{
-	display: none;
-}
+.paused {
+	.pausedtext{
+			display: block;
+		}
+		input{
+			display: none;
+		}
+	}
 
 #worked{
 	font-size: 2em;

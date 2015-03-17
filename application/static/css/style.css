@@ -1,0 +1,88 @@
+html, body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Lato', sans-serif; }
+
+select, button, .formated input, textarea {
+  border: 0 !important;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 0.01px;
+  text-overflow: "";
+  font-family: 'Lato', sans-serif;
+  background: #fff;
+  font-size: 1.2em;
+  border-radius: 0;
+  border: none;
+  padding: 10px 15px;
+  background-color: #fff;
+  box-shadow: 5px 5px 5px #cccccc;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  -ms-transition: all 0.5s;
+  -o-transition: all 0.5s;
+  transition: all 0.5s;
+  vertical-align: top;
+  margin: 10px auto 10px auto; }
+
+#wrapper {
+  text-align: center; }
+
+.worktypes {
+  width: 50%;
+  margin: 0 auto;
+  text-align: center; }
+  .worktypes .worktypecontainer {
+    display: inline-block;
+    padding: 0.5em 1em; }
+    .worktypes .worktypecontainer input {
+      margin: 0.6em; }
+
+#user, #project, #notes {
+  display: block; }
+
+#time {
+  display: none;
+  text-align: center; }
+
+#finish, .pause, #datetime, .notloaded {
+  display: none; }
+
+.working #time {
+  display: block; }
+.working #finish {
+  display: inline-block; }
+.working #notes, .working #project, .working .worktypecontainer, .working #start {
+  display: none; }
+.working .pause {
+  display: block; }
+  .working .pause input {
+    display: none; }
+
+.pausebutton {
+  display: none; }
+
+.paused.working #unpausebutton {
+  display: inline-block; }
+.paused.working #pausebutton {
+  display: none; }
+.paused.working #time {
+  display: none; }
+
+.working #pausebutton {
+  display: inline-block; }
+
+.pausedtext {
+  display: none; }
+
+.paused .pausedtext {
+  display: block; }
+.paused input {
+  display: none; }
+
+#worked {
+  font-size: 2em;
+  padding: 1em; }
+
+#currenttime {
+  padding-top: 1em; }

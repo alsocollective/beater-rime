@@ -119,7 +119,7 @@ class WorkSession(models.Model):
 		("email","email"),
 		("spagetti","spagetti"),
 		("admin","admin")]
-	workType = models.CharField(max_length=12, choices=WORK_CHOISES, default='design')
+	workType = models.CharField(max_length=12, choices=WORK_CHOISES, default='')
 
 
 	def save(self,*args, **kwargs):
