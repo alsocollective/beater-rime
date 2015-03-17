@@ -6,20 +6,39 @@
 		<div class="error">{{error}}</div>
 	{% endif %}
 
-	<form action="/api/starttimmer" method="post">{% csrf_token %}
-		<select id="user" name="name">
-			{% for user in users %}
-				<option value="{{user.pk}}">{{user}}</option>
-			{% endfor %}
-		</select>
-		<select id="project" name="project">
-			{% for project in projects %}
-				<option value="{{project.pk}}">{{project}}</option>
-			{% endfor %}
-		</select>
-		<textarea id="notes" name="task"></textarea>
-		<input type="text" name="time" id="datetime">
-		<input type="submit" value="Submit" id="start">
+	<form action="/api/starttimmer" method="post" class="notloaded">{% csrf_token %}
+		<div class="formated">
+			<select id="user" name="name">
+				{% for user in users %}
+					<option value="{{user.pk}}">{{user}}</option>
+				{% endfor %}
+			</select>
+			<select id="project" name="project">
+				{% for project in projects %}
+					<option value="{{project.pk}}">{{project}}</option>
+				{% endfor %}
+			</select>
+			<textarea id="notes" name="task"></textarea>
+			<input type="text" name="time" id="datetime">
+		</div>
+		<div class="worktypes">
+		{% for worktype in worksession.0.WORK_CHOISES %}
+			<span class="worktypecontainer">{{worktype.0}}<input class="worktype" type="radio" name="worktype" value="{{worktype.0}}"></span>
+		{% endfor %}		
+		</div>
+
+		<div class="pause">
+			<div class="pausedtext">
+				the project is currently paused
+			</div>			
+			<input type="checkbox" name="pause" value="paused">
+		</div>
+		<div class="formated">
+			<input type="submit" value="Pause" class="pausebutton" id="pausebutton">
+			<input type="submit" value="UnPause" class="pausebutton" id="unpausebutton">
+			<input type="submit" value="Start" id="start">
+			<input type="submit" value="Finish" id="finish">
+		</div>
 	</form>
 	<div id="time">
 		<div id="currenttime" ></div>

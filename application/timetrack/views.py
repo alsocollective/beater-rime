@@ -7,7 +7,7 @@ import datetime,json,datetime
 
 
 def home(request):
-	return render(request,'index.html',{"users":Person.objects.all(),"projects":Project.objects.all()})
+	return render(request,'index.html',{"users":Person.objects.all(),"projects":Project.objects.all(),"worksession":WorkSession.objects.all()})
 
 def people(request):
 	out = []
@@ -19,6 +19,8 @@ def people(request):
 			data["start"]=worksession.startTimeFloat
 			data["project"]=worksession.project.name
 			data["projectpk"]=worksession.project.pk
+			data["pause"]=worksession.pauseStart
+			data["delay"]=worksession.minusTime
 		out.append(data)
 	return HttpResponse(json.dumps(out), content_type="application/json")
 
@@ -30,16 +32,36 @@ def project(request):
 
 
 def stopTimmer(request):
+	pause = request.POST.get('pause')
 	name = request.POST.get('name')
 	person = Person.objects.get(pk=name);
 
 	projectsOnTheGo = WorkSession.objects.all().filter(person=person,completed=False)
 	if(not projectsOnTheGo):
 		return render(request,'error.html',{"error":"%s's not on a project"%person})
+	projectsOnTheGo = projectsOnTheGo[0]
 
-	projectsOnTheGo[0].endTimeFloat = request.POST.get('time')
-	projectsOnTheGo[0].completed = True
-	projectsOnTheGo[0].save()
+	if pause:
+		print "\n\n%s"%"pause"
+		if projectsOnTheGo.pauseStart:
+			print "\tpauseend"
+			projectsOnTheGo.pauseEnd = float(request.POST.get('time'))
+			projectsOnTheGo.pauseLength()
+		else:
+			print "\tpausestart"			
+			projectsOnTheGo.pauseStart = float(request.POST.get('time'))
+			projectsOnTheGo.save()
+		return redirect("/")
+
+	projectsOnTheGo.endTimeFloat = float(request.POST.get('time'))
+
+	if projectsOnTheGo.pauseStart:
+		projectsOnTheGo.pauseEnd = projectsOnTheGo.endTimeFloat
+		projectsOnTheGo.pauseLength()
+
+	projectsOnTheGo.completed = True
+	projectsOnTheGo.save()
+
 	person.generatePersonPage()
 	return redirect("/")
 
@@ -56,13 +78,23 @@ def startTimmer(request):
 		return render(request,'error.html',{"error":"%s's already on project"%person})
 
 	#generate new work session
+	project = Project.objects.get(pk=request.POST.get('project'))
+	message = request.POST.get('task')
+	time = float(request.POST.get('time'))
+	workType = request.POST.get('worktype')
+
+	if not workType:
+		workType = "design"
+
 	w = WorkSession(
 		person=person,
-		project=Project.objects.get(pk=request.POST.get('project')),
-		startTimeFloat=float(request.POST.get('time'))
+		project=project,
+		startTimeFloat=time,
+		notes=message,
+		workType=workType
 		)
-	
 	w.save()
+
 	person.generatePersonPage()
 	return redirect("/")
 

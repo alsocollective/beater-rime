@@ -5,7 +5,11 @@ var app = {
 	},
 	dataLoaded: function() {
 		console.log("dataLoaded")
+		$(".notloaded").removeClass("notloaded");
 		$("#user").change(app.user.checkIfWorking);
+		$(".worktypecontainer").click(app.util.workcontainerclick);
+		$(".worktype").click(app.util.radioPressed);
+		$(".pause input").click(app.pausetool.submitonchange);
 		app.user.checkForCookie();
 	},
 	getdata: {
@@ -56,8 +60,6 @@ var app = {
 			} else {
 				app.setUpWorking.cleanup();
 			}
-
-
 		},
 		currentUserNumber: function() {
 			var a = 0,
@@ -75,11 +77,11 @@ var app = {
 		retrivedData: function(data) {
 			app.project.data = data;
 		},
-		byUser: function(username) {
+		byUser: function(usernumber) {
 			var a = 0,
 				max = app.user.data.length;
 			for (a = 0; a < max; ++a) {
-				if (app.user.data[a].pk == parseInt(username)) {
+				if (app.user.data[a].pk == parseInt(usernumber)) {
 					if (app.user.data[a].project) {
 						return app.user.data[a].pk
 					};
@@ -94,6 +96,7 @@ var app = {
 			console.log("setup working");
 			app.submit.type.stop();
 			app.timer.init();
+			app.pausetool.init();
 			$("#wrapper").addClass("working");
 		},
 		cleanup: function() {
@@ -103,12 +106,37 @@ var app = {
 			$("#wrapper").removeClass("working");
 		}
 	},
+	pausetool: {
+		paused: false,
+		init: function() {
+			var user = app.user.currentUserNumber();
+			if (app.user.data[user].pause) {
+				// app.pausetool.paused = true;
+				// $(".pause input")[0].checked = true;
+				$("#wrapper").addClass("paused");
+			} else {
+				// app.pausetool.paused = false;
+				// $(".pause input")[0].checked = false;
+				$("#wrapper").removeClass("paused");
+			}
+		},
+		submitonchange: function() {
+			// $("#start").click();
+		}
+	},
 	submit: {
 		init: function() {
 			$("#start").click(app.submit.start);
+			$("#finish").click(app.submit.start);
+			$(".pausebutton").click(app.submit.pause);
 		},
 		start: function(event) {
 			$.cookie('name', $("#user").val());
+			$("#datetime").val(Date.parse(new Date) / 1000);
+		},
+		pause: function(event) {
+			$.cookie('name', $("#user").val());
+			$(".pause input")[0].checked = true;
 			$("#datetime").val(Date.parse(new Date) / 1000);
 		},
 		type: {
@@ -148,8 +176,13 @@ var app = {
 			console.log("tick");
 			var datenow = new Date(),
 				dateold = app.timer.time.dateold,
-				time = app.timer.toTimeNumber(Math.abs(datenow.getTime() - dateold.getTime()) / (60000));
+				paused = app.timer.pausedTime(),
+				time = app.timer.toTimeNumber(Math.abs(datenow.getTime() - dateold.getTime() - paused) / (60000));
 			app.timer.renderTime(time, app.timer.toTimeDate(dateold), app.timer.toTimeDate(datenow));
+		},
+		pausedTime: function() {
+			var user = app.user.currentUserNumber();
+			return app.user.data[user].delay * 1000
 		},
 		toTimeDate: function(date) {
 			return date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
@@ -166,6 +199,23 @@ var app = {
 		},
 		stop: function() {
 			window.clearInterval(app.timer.ticker);
+		}
+	},
+	util: {
+		workcontainerclick: function(event) {
+			event.preventDefault();
+			var el = $(this).find(".worktype")[0];
+			if (el.checked) {
+				el.checked = false;
+			} else {
+				el.checked = true;
+			}
+			return false;
+		},
+		radioPressed: function(event) {
+			event.preventDefault();
+			event.stopPropagation();
+			return false;
 		}
 	}
 }

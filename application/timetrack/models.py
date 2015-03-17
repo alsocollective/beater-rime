@@ -1,17 +1,35 @@
 from django.db import models
 from django.template.defaultfilters import slugify
-import gspread,thread
+import gspread,thread,datetime
 from application.settings import Googlelogin
 
+def println(text):
+	print "\n\t%s\n"%text
 
 def getWorkSheet(pageName):
 	gc = gspread.login(Googlelogin["user"], Googlelogin["password"])
-	sh = gc.open("timetrackdjango")
+	sh = gc.open("testtimer")
 	try:
 		return sh.worksheet(pageName)
 	except Exception, e:
-		return sh.add_worksheet(title=pageName, rows="20", cols="10")
+		return sh.add_worksheet(title=pageName, rows="200", cols="9")
 
+#creates a page with content feed into it
+#page name 			= "page to be generate"
+#content 			= array of elements to be parsed
+#parseArrayFunction	= function returns an array of elements to be saved the same size as coloumns
+#coloumns 			= the number of elements to be returned by parseArrayFunction
+def generatePage(pageName,content,parseArrayFunction,coloumns):
+	print "\t generating: %s page"%pageName
+	wks = getWorkSheet(pageName)
+	count = len(content)
+	cell_list = wks.range('A2:%s%d'%(chr(64+coloumns),count+1))
+	for i in range(0,count):
+		data = parseArrayFunction(content[i])
+		for x in range(0,coloumns):
+			cell_list[(i*coloumns)+x].value = data[x]
+	wks.update_cells(cell_list)
+	print "\t generated: %s page"%pageName
 
 
 class Person(models.Model):
@@ -26,24 +44,29 @@ class Person(models.Model):
 		super(Person, self).save(*args, **kwargs)
 	
 	def generatePersonPage(self):
-		def update():
-			persons = Person.objects.all()
-			wks = getWorkSheet("People")
-			count = len(persons)
-			cell_list = wks.range('A1:C%d'%count)
-			for i in range(0,count):
-				cell_list[(i*3)].value = persons[i]
-				worksession = WorkSession.objects.all().filter(person=persons[i],completed=False)
-				if(worksession):
-					worksession = worksession[0]
-					cell_list[(i*3)+1].value=worksession.startTimeFloat
-					cell_list[(i*3)+2].value=worksession.project.name
-				else:
-					cell_list[(i*3)+1].value=0
-					cell_list[(i*3)+2].value=0
-			wks.update_cells(cell_list)
+		content = Person.objects.all()
+		def parser(person):
+			worksession = WorkSession.objects.all().filter(person=person,completed=False)
+			if worksession:
+				worksession = worksession[0]
+				return [person,worksession.startTime,worksession.project.name,worksession.notes]
+			return [person,"","",""]
+		thread.start_new_thread(generatePage,("People",content,parser,4))
 
-		thread.start_new_thread(update,())
+
+		contentPerson = WorkSession.objects.all().filter(person=self)
+		def personParser(task):
+			return [
+				task.project,
+				task.startTime,
+				task.notes,
+				task.workType,
+				task.totalhours,
+				task.minusTime
+			]
+
+		thread.start_new_thread(generatePage,(self.name,contentPerson,personParser,6))
+
 
 	def __unicode__(self):
 		return self.name
@@ -59,20 +82,10 @@ class Project(models.Model):
 		super(Project, self).save(*args, **kwargs)
 
 	def generateProjectPage(self):
-		def update(self):
-			print "\n\n\n\n\n\n\n\n\n%s\n\n\n\n\n\n\n"%self.name
-			wks = getWorkSheet(self.name)
-			worksession = WorkSession.objects.all().filter(project=self)
-			count = len(worksession)
-			cell_list = wks.range('A1:D%d'%count)
-			for i in range(0,count):
-				cell_list[(i*4)].value = worksession[i].person
-				cell_list[(i*4)+1].value=worksession[i].startTimeFloat
-				cell_list[(i*4)+2].value=worksession[i].endTimeFloat
-				cell_list[(i*4)+3].value="=C%d-B%d"%(i+1,i+1)
-			wks.update_cells(cell_list)
-
-		thread.start_new_thread(update,(self,))
+		content = WorkSession.objects.all().filter(project=self)
+		def parser(element):
+			return [element.person,element.startTime,element.endTime,element.totalhours,element.totalhourstext,element.workType,element.notes]
+		thread.start_new_thread(generatePage,(self.name,content,parser,7))
 	
 	def __unicode__(self):
 		return self.name
@@ -95,10 +108,46 @@ class WorkSession(models.Model):
 	pauseStart = models.FloatField(blank=True, null=True)
 	pauseEnd = models.FloatField(blank=True, null=True)
 
+	# should be called totalseconds
 	totalhours = models.FloatField(blank=True, null=True)
+	totalhourstext = models.CharField(max_length=200,blank=True,null=True)
+
+	#workType
+	WORK_CHOISES = [
+		("design","design"),
+		("development","development"),
+		("email","email"),
+		("spagetti","spagetti"),
+		("admin","admin")]
+	workType = models.CharField(max_length=12, choices=WORK_CHOISES, default='design')
+
 
 	def save(self,*args, **kwargs):
-		self.project.generateProjectPage()
+		if self.completed:
+			self.deltaTime()
+			self.project.generateProjectPage()
+		else:
+			self.startTime = datetime.datetime.fromtimestamp(self.startTimeFloat)
+
+		super(WorkSession, self).save(*args, **kwargs)
+
+	def deltaTime(self):
+		t1 = datetime.datetime.fromtimestamp(self.startTimeFloat)
+		t2 = datetime.datetime.fromtimestamp(self.endTimeFloat)
+		self.endTime = t2
+		delta = t2-t1
+		self.totalhours = delta.total_seconds()-self.minusTime
+		self.totalhourstext = str(delta)
+
+	def pauseLength(self):
+		t1 = datetime.datetime.fromtimestamp(self.pauseStart)
+		t2 = datetime.datetime.fromtimestamp(self.pauseEnd)
+		delta = t2-t1
+		self.pauseStart = 0
+		self.pauseEnd = 0
+		self.minusTime += delta.total_seconds()
+		self.save()
+
 
 	def __unicode__(self):
 		return "%s -- %s"%(self.person,self.project)
