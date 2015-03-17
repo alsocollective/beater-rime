@@ -14,5 +14,6 @@ settings.py
 /.sass-cache
 /env/*
 /build/*
+/node_modules/*
 public_html
 public
