@@ -84,7 +84,7 @@ def startTimmer(request):
 	workType = request.POST.get('worktype')
 
 	if not workType:
-		workType = "design"
+		workType = ""
 
 	w = WorkSession(
 		person=person,
