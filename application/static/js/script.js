@@ -8,7 +8,7 @@ var app = {
 		$(".notloaded").removeClass("notloaded");
 		$("#user").change(app.user.checkIfWorking);
 		$(".worktypecontainer").click(app.util.workcontainerclick);
-		$(".worktype").click(app.util.radioPressed);
+		// $(".worktype").click(app.util.radioPressed);
 		$(".pause input").click(app.pausetool.submitonchange);
 		app.user.checkForCookie();
 	},
@@ -203,6 +203,9 @@ var app = {
 	},
 	util: {
 		workcontainerclick: function(event) {
+			if (event.target.nodeName == "INPUT") {
+				return true;
+			}
 			event.preventDefault();
 			var el = $(this).find(".worktype")[0];
 			if (el.checked) {
@@ -210,11 +213,6 @@ var app = {
 			} else {
 				el.checked = true;
 			}
-			return false;
-		},
-		radioPressed: function(event) {
-			event.preventDefault();
-			event.stopPropagation();
 			return false;
 		}
 	}
