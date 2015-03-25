@@ -25,6 +25,24 @@ select, button, .formated input, textarea {
   vertical-align: top;
   margin: 10px auto 10px auto; }
 
+table {
+  margin: 0 auto;
+  margin-top: 2em; }
+
+th, td {
+  padding: 0.5em;
+  border-left: solid 1px #ccc;
+  border-right: solid 1px #ccc; }
+  th:first-child, td:first-child {
+    border-left-width: 0px; }
+  th:last-child, td:last-child {
+    border-right-width: 0px; }
+
+tr:nth-child(2n) {
+  background-color: #ccc; }
+tr:first-child {
+  border-top: solid 1px #ccc; }
+
 #wrapper {
   text-align: center; }
 
@@ -86,3 +104,29 @@ select, button, .formated input, textarea {
 
 #currenttime {
   padding-top: 1em; }
+
+.optionlist {
+  width: 50%;
+  max-width: 400px;
+  display: inline-block;
+  border-top: solid 1px #ccc;
+  border-bottom: solid 1px #ccc;
+  padding: 0; }
+  .optionlist li {
+    text-align: left;
+    list-style: none; }
+    .optionlist li a {
+      display: inline-block;
+      padding: 0.5em; }
+    .optionlist li:nth-child(2n) {
+      background-color: #ccc; }
+
+.footer {
+  margin-top: 3em; }
+  .footer a {
+    color: inherit;
+    text-decoration: none;
+    display: inline-block;
+    padding: 0.5em; }
+    .footer a:hover {
+      background-color: #ccc; }

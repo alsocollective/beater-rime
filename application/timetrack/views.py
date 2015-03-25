@@ -5,9 +5,15 @@ from timetrack.models import *
 
 import datetime,json,datetime
 
+def getActiveSheetURL():
+	try:
+		return SpreadSheet.objects.get(active=True).url
+	except Exception, e:
+		print e
+		return "/"
 
 def home(request):
-	return render(request,'index.html',{"users":Person.objects.all(),"projects":Project.objects.all(),"worksession":WorkSession.objects.all()})
+	return render(request,'index.html',{"users":Person.objects.all().order_by('name'),"projects":Project.objects.all().order_by('name'),"worksession":WorkSession.objects.all(),"spreadsheet":getActiveSheetURL()})
 
 def people(request):
 	out = []
@@ -99,7 +105,25 @@ def startTimmer(request):
 	return redirect("/")
 
 def view_people(request):
-	return HttpResponse("people");
-	
+	userID = request.GET.get('id')
+	if(userID != None):
+		person = Person.objects.get(pk=int(userID))
+
+		return render(request,"person.html",{
+			"person":person,
+			"worksessions":WorkSession.objects.all().filter(person=person,completed=True).order_by('-endTime'),
+			"active":WorkSession.objects.all().filter(person=person,completed=False),
+			"spreadsheet":getActiveSheetURL()
+			});
+
+	return render(request,'optionlist.html',{"page":"people","data":Person.objects.all().order_by('name'),"spreadsheet":getActiveSheetURL()})
+
 def view_project(request):
-	return HttpResponse("projects");
+	userID = request.GET.get('id')
+	if(userID != None):
+		project = Project.objects.get(pk=int(userID))
+		return HttpResponse(project.name);
+
+	return render(request,'optionlist.html',{"page":"project","data":Project.objects.all().order_by('name'),"spreadsheet":getActiveSheetURL()})
+
+

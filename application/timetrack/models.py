@@ -42,10 +42,17 @@ class SpreadSheet(models.Model):
 	name = models.CharField(max_length=1000)
 	slug = models.SlugField(blank=True)
 	active = models.BooleanField(default=False)
+	url = models.CharField(max_length=2000,blank=True)
 
 	def save(self,*args, **kwargs):
 		self.slug = slugify(self.name)
+		self.getURL()
 		super(SpreadSheet, self).save(*args, **kwargs)
+
+	def getURL(self):
+		gc = gspread.login(Googlelogin["user"], Googlelogin["password"])
+		sh = gc.open(self.name)
+		self.url = "https://docs.google.com/a/alsocollective.com/spreadsheets/d/%s"%sh.id
 
 	def __unicode__(self):
 		return self.name
