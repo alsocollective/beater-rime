@@ -98,3 +98,8 @@ def startTimmer(request):
 	person.generatePersonPage()
 	return redirect("/")
 
+def view_people(request):
+	return HttpResponse("people");
+	
+def view_project(request):
+	return HttpResponse("projects");

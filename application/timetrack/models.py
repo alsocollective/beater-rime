@@ -8,7 +8,14 @@ def println(text):
 
 def getWorkSheet(pageName):
 	gc = gspread.login(Googlelogin["user"], Googlelogin["password"])
-	sh = gc.open("testtimer")
+	# retrive active spreadsheet
+	try:
+		sheet = SpreadSheet.objects.get(active=True).name
+	except Exception, e:
+		print e
+		sheet = "testtimer"
+
+	sh = gc.open(sheet)
 	try:
 		return sh.worksheet(pageName)
 	except Exception, e:
@@ -31,18 +38,37 @@ def generatePage(pageName,content,parseArrayFunction,coloumns):
 	wks.update_cells(cell_list)
 	print "\t generated: %s page"%pageName
 
+class SpreadSheet(models.Model):
+	name = models.CharField(max_length=1000)
+	slug = models.SlugField(blank=True)
+	active = models.BooleanField(default=False)
+
+	def save(self,*args, **kwargs):
+		self.slug = slugify(self.name)
+		super(SpreadSheet, self).save(*args, **kwargs)
+
+	def __unicode__(self):
+		return self.name
 
 class Person(models.Model):
 	name = models.CharField(max_length=500)
 	slug = models.SlugField(blank=True)
 
+	sheet = models.ForeignKey(SpreadSheet,blank=True,null=True)
 	lastProject = models.ForeignKey("Project",blank=True,null=True)
 
 	def save(self,*args, **kwargs):
 		self.slug = slugify(self.name)
 		self.generatePersonPage()
+		self.setSheet()
 		super(Person, self).save(*args, **kwargs)
 	
+	def setSheet(self):
+		try:
+			self.sheet = SpreadSheet.objects.get(active=True)
+		except Exception, e:
+			print e
+
 	def generatePersonPage(self):
 		content = Person.objects.all()
 		def parser(person):
@@ -75,11 +101,19 @@ class Project(models.Model):
 	name = models.CharField(max_length=500)
 	completed = models.BooleanField(default=False)
 	slug = models.SlugField(blank=True)
+	sheet = models.ForeignKey(SpreadSheet,blank=True,null=True)
 
 	def save(self,*args, **kwargs):
 		self.slug = slugify(self.name)
 		self.generateProjectPage()
+		self.setSheet()
 		super(Project, self).save(*args, **kwargs)
+
+	def setSheet(self):
+		try:
+			self.sheet = SpreadSheet.objects.get(active=True)
+		except Exception, e:
+			print e
 
 	def generateProjectPage(self):
 		content = WorkSession.objects.all().filter(project=self)
@@ -120,7 +154,7 @@ class WorkSession(models.Model):
 		("spagetti","spagetti"),
 		("admin","admin")]
 	workType = models.CharField(max_length=12, choices=WORK_CHOISES, default='')
-
+	sheet = models.ForeignKey(SpreadSheet,blank=True,null=True)
 
 	def save(self,*args, **kwargs):
 		if self.completed:
@@ -128,8 +162,14 @@ class WorkSession(models.Model):
 			self.project.generateProjectPage()
 		else:
 			self.startTime = datetime.datetime.fromtimestamp(self.startTimeFloat)
-
+		self.setSheet()		
 		super(WorkSession, self).save(*args, **kwargs)
+
+	def setSheet(self):
+		try:
+			self.sheet = SpreadSheet.objects.get(active=True)
+		except Exception, e:
+			print e
 
 	def deltaTime(self):
 		t1 = datetime.datetime.fromtimestamp(self.startTimeFloat)
