@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<h1>{{person}}</h1>
+
+{% if active.0 %}
+	<table>
+		<tr>
+			<td>{{active.0.person}}</td>
+			<td>{{active.0.project}}</td>
+			<td>{{active.0.startTime}}</td>
+		</tr>
+	</table>
+{% else %}
+	<h3>Not currently working</h3>
+{% endif %}
+
+
+<table>
+	<tr>
+		<th>Person</th>
+		<th>Project</th>
+		<th>StartTime</th>
+		<th>EndTime</th>
+	</tr>
+	{% for session in worksessions %}
+		<tr>
+			<td>{{session.person}}</td>
+			<td>{{session.project}}</td>
+			<td>{{session.startTime}}</td>
+			<td>{{session.endTime}}</td>
+		</tr>
+	{% endfor %}
+</table>
+
+{% include "footer.html" %}
+{% endblock %}

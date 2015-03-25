@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<h1>{{page}}</h1>
+
+<ul class="optionlist">
+	{% for item in data %}
+		<li><a href="/{{page}}/?id={{item.pk}}">{{item}}</a></li>
+	{% endfor %}
+</ul>
+
+{% include "footer.html" %}
+
+{% endblock %}
