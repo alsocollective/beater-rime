@@ -130,3 +130,6 @@ tr:first-child {
     padding: 0.5em; }
     .footer a:hover {
       background-color: #ccc; }
+
+#adminpage tr:nth-child(2n) {
+  background-color: #fff; }
