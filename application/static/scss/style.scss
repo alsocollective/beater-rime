@@ -182,3 +182,11 @@ tr {
 }
 
 
+#adminpage{
+	tr {
+		&:nth-child(2n){
+			background-color: #fff;
+		}
+	}
+}
+}

@@ -9,6 +9,8 @@ urlpatterns = patterns('',
     url(r'^people/', 'timetrack.views.view_people', name='home'),
     url(r'^project/', 'timetrack.views.view_project', name='home'),
     url(r'^api/',include('timetrack.urls')),
+	url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}),
+
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),

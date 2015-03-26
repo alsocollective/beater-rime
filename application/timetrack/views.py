@@ -5,6 +5,9 @@ from timetrack.models import *
 
 import datetime,json,datetime
 
+from django.contrib.auth.decorators import login_required
+
+
 def getActiveSheetURL():
 	try:
 		return SpreadSheet.objects.get(active=True).url
@@ -12,6 +15,7 @@ def getActiveSheetURL():
 		print e
 		return "/"
 
+@login_required(login_url='/login/')
 def home(request):
 	return render(request,'index.html',{"users":Person.objects.all().order_by('name'),"projects":Project.objects.all().order_by('name'),"worksession":WorkSession.objects.all(),"spreadsheet":getActiveSheetURL()})
 
@@ -104,6 +108,7 @@ def startTimmer(request):
 	person.generatePersonPage()
 	return redirect("/")
 
+@login_required(login_url='/login/')
 def view_people(request):
 	userID = request.GET.get('id')
 	if(userID != None):
@@ -118,6 +123,7 @@ def view_people(request):
 
 	return render(request,'optionlist.html',{"page":"people","data":Person.objects.all().order_by('name'),"spreadsheet":getActiveSheetURL()})
 
+@login_required(login_url='/login/')
 def view_project(request):
 	userID = request.GET.get('id')
 	if(userID != None):
