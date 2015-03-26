@@ -17,7 +17,7 @@ def getActiveSheetURL():
 
 @login_required(login_url='/login/')
 def home(request):
-	return render(request,'index.html',{"users":Person.objects.all().order_by('name'),"projects":Project.objects.all().order_by('name'),"worksession":WorkSession.objects.all(),"spreadsheet":getActiveSheetURL()})
+	return render(request,'index.html',{"users":Person.objects.all().order_by('name'),"projects":Project.objects.all().order_by('name'),"worksession":WorkSession.objects.all(),"spreadsheet":getActiveSheetURL(),"worktypes":WorkTypes.objects.all()})
 
 def people(request):
 	out = []
@@ -92,16 +92,18 @@ def startTimmer(request):
 	message = request.POST.get('task')
 	time = float(request.POST.get('time'))
 	workType = request.POST.get('worktype')
-
+	print "\n\n\n\n\n!!!!!!!!"
+	print workType
 	if not workType:
-		workType = ""
-
+		workType = None
+	else:
+		workType = WorkTypes.objects.get(slug=workType)
 	w = WorkSession(
 		person=person,
 		project=project,
 		startTimeFloat=time,
 		notes=message,
-		workType=workType
+		workTypes=workType
 		)
 	w.save()
 

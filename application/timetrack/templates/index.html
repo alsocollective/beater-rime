@@ -22,8 +22,8 @@
 			<input type="text" name="time" id="datetime">
 		</div>
 		<div class="worktypes">
-		{% for worktype in worksession.0.WORK_CHOISES %}
-			<span class="worktypecontainer">{{worktype.0}}<input class="worktype" type="radio" name="worktype" value="{{worktype.0}}"></span>
+		{% for worktype in worktypes %}
+			<span class="worktypecontainer">{{worktype}}<input class="worktype" type="radio" name="worktype" value="{{worktype.slug}}"></span>
 		{% endfor %}		
 		</div>
 

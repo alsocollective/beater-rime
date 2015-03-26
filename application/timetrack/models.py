@@ -93,7 +93,7 @@ class Person(models.Model):
 				task.project,
 				task.startTime,
 				task.notes,
-				task.workType,
+				task.workTypes,
 				task.totalhours,
 				task.minusTime
 			]
@@ -125,13 +125,22 @@ class Project(models.Model):
 	def generateProjectPage(self):
 		content = WorkSession.objects.all().filter(project=self)
 		def parser(element):
-			return [element.person,element.startTime,element.endTime,element.totalhours,element.totalhourstext,element.workType,element.notes]
+			return [element.person,element.startTime,element.endTime,element.totalhours,element.totalhourstext,element.workTypes,element.notes]
 		thread.start_new_thread(generatePage,(self.name,content,parser,7))
 	
 	def __unicode__(self):
 		return self.name
 
+class WorkTypes(models.Model):
+	name = models.CharField(max_length=500)
+	short = models.CharField(max_length=500)
+	slug = models.SlugField(blank=True)
 
+	def save(self,*args, **kwargs):
+		self.slug = slugify(self.name)
+		super(WorkTypes, self).save(*args, **kwargs)
+	def __unicode__(self):
+		return self.name
 class WorkSession(models.Model):
 	person = models.ForeignKey(Person)
 	project = models.ForeignKey(Project)
@@ -154,13 +163,16 @@ class WorkSession(models.Model):
 	totalhourstext = models.CharField(max_length=200,blank=True,null=True)
 
 	#workType
-	WORK_CHOISES = [
-		("design","design"),
-		("development","development"),
-		("email","email"),
-		("spagetti","spagetti"),
-		("admin","admin")]
-	workType = models.CharField(max_length=12, choices=WORK_CHOISES, default='')
+	# WORK_CHOISES = [
+	# 	("design","design"),
+	# 	("development","development"),
+	# 	("email","email"),
+	# 	("spagetti","spagetti"),
+	# 	("admin","admin")]
+	# workType = models.CharField(max_length=12, choices=WORK_CHOISES, default='')
+
+	workTypes = models.ForeignKey(WorkTypes,blank=True,null=True)
+
 	sheet = models.ForeignKey(SpreadSheet,blank=True,null=True)
 
 	def save(self,*args, **kwargs):
