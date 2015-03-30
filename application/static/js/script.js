@@ -95,6 +95,10 @@ var app = {
 		init: function() {
 			console.log("setup working");
 			app.submit.type.stop();
+
+			var user = app.user.currentUserNumber();
+			$("#projectmeta")[0].innerHTML = "<b>" + app.user.data[user].project + "</b> " + app.user.data[user].notes
+
 			app.timer.init();
 			app.pausetool.init();
 			$("#wrapper").addClass("working");
@@ -170,6 +174,7 @@ var app = {
 			minutesworked = Math.ceil(Math.abs(datenow.getTime() - dateold.getTime()) / (1000));
 			console.log("minutes worked " + minutesworked);
 			app.timer.ticker = setInterval(app.timer.tick, 1000);
+			app.timer.tick();
 		},
 		ticker: null,
 		tick: function() {

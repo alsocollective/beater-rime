@@ -28,6 +28,7 @@ def people(request):
 			worksession = worksession[0]
 			data["start"]=worksession.startTimeFloat
 			data["project"]=worksession.project.name
+			data["notes"]=worksession.notes
 			data["projectpk"]=worksession.project.pk
 			data["pause"]=worksession.pauseStart
 			data["delay"]=worksession.minusTime
@@ -127,10 +128,16 @@ def view_people(request):
 
 @login_required(login_url='/login/')
 def view_project(request):
-	userID = request.GET.get('id')
-	if(userID != None):
-		project = Project.objects.get(pk=int(userID))
-		return HttpResponse(project.name);
+	projectID = request.GET.get('id')
+	if(projectID != None):
+		project = Project.objects.get(pk=int(projectID))
+
+		return render(request,"project.html",{
+			"project":project,
+			"worksessions":WorkSession.objects.all().filter(project=project,completed=True).order_by('-endTime'),
+			"active":WorkSession.objects.all().filter(project=project,completed=False),
+			"spreadsheet":getActiveSheetURL()
+			});
 
 	return render(request,'optionlist.html',{"page":"project","data":Project.objects.all().order_by('name'),"spreadsheet":getActiveSheetURL()})
 

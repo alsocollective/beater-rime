@@ -27,12 +27,25 @@ select, button, .formated input, textarea {
 
 table {
   margin: 0 auto;
-  margin-top: 2em; }
+  margin-top: 2em;
+  max-width: 80%;
+  text-align: left; }
+  table .notes {
+    text-align: left;
+    font-size: 0.7em;
+    max-width: 150px;
+    padding-top: 1em; }
+  table a {
+    color: inherit;
+    text-decoration: none; }
+  table th {
+    text-align: center; }
 
 th, td {
   padding: 0.5em;
   border-left: solid 1px #ccc;
-  border-right: solid 1px #ccc; }
+  border-right: solid 1px #ccc;
+  vertical-align: bottom; }
   th:first-child, td:first-child {
     border-left-width: 0px; }
   th:last-child, td:last-child {
@@ -61,13 +74,30 @@ tr:first-child {
 
 #time {
   display: none;
-  text-align: center; }
+  text-align: center;
+  padding: 1.5em;
+  box-shadow: 5px 5px 5px #ccc;
+  margin: 2em; }
+
+#projectmeta {
+  font-size: 1em; }
+  #projectmeta b {
+    font-size: 2.5em;
+    display: block;
+    padding-bottom: 0.25em; }
 
 #finish, .pause, #datetime, .notloaded {
   display: none; }
 
+.workshow {
+  display: none;
+  padding: 1.5em;
+  box-shadow: 5px 5px 5px #ccc;
+  margin: 2em;
+  vertical-align: top; }
+
 .working #time {
-  display: block; }
+  display: inline-block; }
 .working #finish {
   display: inline-block; }
 .working #notes, .working #project, .working .worktypecontainer, .working #start {
@@ -76,6 +106,8 @@ tr:first-child {
   display: block; }
   .working .pause input {
     display: none; }
+.working .workshow {
+  display: inline-block; }
 
 .pausebutton {
   display: none; }
@@ -100,10 +132,7 @@ tr:first-child {
 
 #worked {
   font-size: 2em;
-  padding: 1em; }
-
-#currenttime {
-  padding-top: 1em; }
+  padding: 0.5em 0 0em 0; }
 
 .optionlist {
   width: 50%;
@@ -112,6 +141,9 @@ tr:first-child {
   border-top: solid 1px #ccc;
   border-bottom: solid 1px #ccc;
   padding: 0; }
+  .optionlist a {
+    color: inherit;
+    text-decoration: none; }
   .optionlist li {
     text-align: left;
     list-style: none; }
@@ -122,7 +154,8 @@ tr:first-child {
       background-color: #ccc; }
 
 .footer {
-  margin-top: 3em; }
+  margin-top: 3em;
+  padding-bottom: 3em; }
   .footer a {
     color: inherit;
     text-decoration: none;

@@ -2,20 +2,23 @@
 {% load static %}
 
 {% block content %}
-<h1>{{person}}</h1>
+<h1>{{project}}</h1>
+
 
 {% if active.0 %}
 	<table>
+	{% for pro in active %}
 		<tr>
-			<td>{{active.0.project}}</td>
-			{% if active.0.workTypes %}<td>{{active.0.workTypes}}</td>{% endif %}
-			<td>{{active.0.notes}}</td>
-			<td>{{active.0.startTime|date:"G:i - j - N"}}</td>
-			<td><a href="/admin/timetrack/worksession/{{active.0.pk}}/">Edit</a></td>
+			<td>{{pro.project}}</td>
+			{% if pro.workTypes %}<td>{{pro.workTypes}}</td>{% endif %}
+			<td>{{pro.notes}}</td>
+			<td>{{pro.startTime|date:"G:i - j - N"}}</td>
+			<td><a href="/admin/timetrack/worksession/{{pro.pk}}/">Edit</a></td>
 		</tr>
+	{% endfor %}
 	</table>
 {% else %}
-	<h3>Not currently working</h3>
+	<h3>No one is currently working on this project</h3>
 {% endif %}
 
 
