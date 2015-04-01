@@ -1,0 +1,112 @@
+
+
+.worktypes{
+	width: 50%;
+	margin: 0 auto;
+	text-align: center;
+	.worktypecontainer{
+		display: inline-block;
+		padding: 0.5em 1em;
+		input{
+			margin: 0.6em;
+		}
+	}
+}
+
+#user,#project,#notes{
+	display: block;
+}
+#notes,#workingnotes{
+	width: 50%;
+	height: 150px;
+}
+
+#time{
+	display: none;
+	text-align: center;
+	padding: 1.5em;
+	box-shadow: 5px 5px 5px #ccc;
+	margin: 2em;
+}
+#projectmeta{
+	font-size: 1em;
+	b{
+		font-size: 2.5em;
+		display: block;
+		padding-bottom: 0.25em;
+	}
+}
+
+
+#finish,.pause,#datetime,.notloaded{
+	display: none;
+}
+
+.workshow{
+	display: none;
+	padding: 1.5em;
+	// border: 1px solid #000;
+	box-shadow: 5px 5px 5px #ccc;	
+	margin: 2em;
+	vertical-align: top;
+}
+.working{
+	#time{
+		display:inline-block;
+	}
+	#finish{
+		display: inline-block;
+	}
+	#notes,#project,.worktypecontainer,#start{
+		display: none;
+	}
+	.pause{
+		display: block;
+		input{
+			display:none;
+		}
+	}
+	.workshow{
+		display: inline-block;
+	}
+
+}
+
+.pausebutton{
+	display: none;
+}
+.paused.working {
+	#unpausebutton{
+		display: inline-block;
+	}
+	#pausebutton{
+		display: none;
+	}
+	#time{
+		display: none;
+	}	
+}
+
+.working #pausebutton{
+	display: inline-block;
+}
+
+
+.pausedtext{
+	display: none;
+}
+.paused {
+	.pausedtext{
+			display: block;
+		}
+		input{
+			display: none;
+		}
+	}
+
+#worked{
+	font-size: 2em;
+	padding: 0.5em 0 0em 0;
+}
+
+
