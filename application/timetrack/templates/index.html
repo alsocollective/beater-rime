@@ -2,63 +2,23 @@
 {% load static %}
 
 {% block content %}
-	{% if error %}
-		<div class="error">{{error}}</div>
-	{% endif %}
+<h1>ALSO Collective</h1>
+<ul class="optionlist homepage">
+	<li><a href="time/">Time</a></li>
+	<li><a href="http://wiki.alsocollective.com">Wiki</a></li>
+	<li><a href="http://cal.alsocollective.com">Calendar</a></li>
+	<li><a href="http://drive.alsocollective.com">Drive</a></li>
+	<li><a href="http://mail.alsocollective.com">Gmail</a></li>
 
-	<form action="/api/starttimmer" method="post" class="notloaded">{% csrf_token %}
-		<div class="formated">
-			<select id="user" name="name">
-				{% for user in users %}
-					<option value="{{user.pk}}">{{user}}</option>
-				{% endfor %}
-			</select>
-			<select id="project" name="project">
-				{% for project in projects %}
-					<option value="{{project.pk}}">{{project}}</option>
-				{% endfor %}
-			</select>
-			<textarea id="notes" name="task"></textarea>
-			<input type="text" name="time" id="datetime">
-		</div>
-		<div class="worktypes">
-		{% for worktype in worktypes %}
-			<span class="worktypecontainer">{{worktype}}<input class="worktype" type="radio" name="worktype" value="{{worktype.slug}}"></span>
-		{% endfor %}		
-		</div>
+	<li><a href="people/">People</a></li>
+	<li><a href="project/">Projects</a></li>
+	<li><a href="http://sites.alsocollective.com">Sites</a></li>
 
-		<div class="pause">
-			<div class="pausedtext">
-				the project is currently paused
-			</div>			
-			<input type="checkbox" name="pause" value="paused">
-		</div>
-		<div class="formated">
-			<input type="submit" value="Pause" class="pausebutton" id="pausebutton">
-			<input type="submit" value="UnPause" class="pausebutton" id="unpausebutton">
-			<input type="submit" value="Start" id="start">
-			<input type="submit" value="Finish" id="finish">
-		</div>
-	</form>
-	<div id="time">
-		<div id="currenttime" ></div>
-		<div id="starttime" ></div>
-		<div id="worked"></div>
-	</div>
-	<div class="workshow">
-		<div id="projectmeta"></div>
-	</div>
 
+
+</ul>
 
 	{% include "footer.html" %}
-{% endblock %}
 
 
-
-{% block script %}
-	<script type="text/javascript">
-	$(document).ready(function(){
-		app.init();
-	});
-	</script>
-{% endblock %}
+{% endblock content %}

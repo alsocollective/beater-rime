@@ -1,7 +1,63 @@
 var app = {
 	init: function() {
-		app.getdata.init();
 		app.submit.init();
+	},
+	submit: {
+		init: function() {
+			$("#finish,#start").click(app.submit.startStop);
+			$(".pausebutton").click(app.submit.pause);
+		},
+		startStop: function(event) {
+			var project = $("#project");
+			if (project.length > 0 && !project.val()) {
+				event.preventDefault();
+				alert("select a project ;)")
+				return false;
+			}
+			$("#datetime").val(Date.parse(new Date) / 1000);
+		},
+		pause: function() {
+			$(".pause input")[0].checked = true;
+			$("#datetime").val(Date.parse(new Date) / 1000);
+		}
+	},
+	time: {
+		dateold: null,
+		paused: null,
+		init: function(startTime, pauseTime) {
+			app.time.paused = new Date(pauseTime * 1000);
+			app.time.dateold = new Date(startTime * 1000);
+			$("#starttime").html(app.time.toTimeDate(app.time.dateold));
+			app.time.ticker = setInterval(app.time.tick, 1000);
+			app.time.tick();
+		},
+		tick: function() {
+			var datenow = new Date(),
+				dateold = app.time.dateold,
+				paused = app.time.paused,
+				time = app.time.toTimeNumber(Math.abs(datenow.getTime() - dateold.getTime() - paused) / (60000));
+
+			$("#currenttime").html(app.time.toTimeDate(datenow));
+			$("#worked").html(time);
+		},
+		toTimeDate: function(date) {
+			return date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+		},
+		toTimeNumber: function(ammount) {
+			var flat = Math.floor(ammount),
+				small = Math.floor(((Math.ceil(ammount * 100) / 100.0) - flat) * 60)
+			return flat + ":" + small;
+		},
+	}
+}
+
+
+
+var oldapp = {
+	init: function() {
+
+		// app.getdata.init();
+		// app.submit.init();
 	},
 	dataLoaded: function() {
 		console.log("dataLoaded")
@@ -70,6 +126,9 @@ var app = {
 					return a;
 				}
 			}
+		},
+		setUser: function(userName) {
+			app.user.userName = userName;
 		}
 	},
 	project: {

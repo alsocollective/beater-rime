@@ -6,6 +6,7 @@ from timetrack.models import *
 import datetime,json,datetime
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
 
 
 def getActiveSheetURL():
@@ -17,7 +18,27 @@ def getActiveSheetURL():
 
 @login_required(login_url='/login/')
 def home(request):
-	return render(request,'index.html',{"users":Person.objects.all().order_by('name'),"projects":Project.objects.all().order_by('name'),"worksession":WorkSession.objects.all(),"spreadsheet":getActiveSheetURL(),"worktypes":WorkTypes.objects.all()})
+
+	return render(request,'index.html',{
+		"spreadsheet":getActiveSheetURL()
+		})
+
+@login_required(login_url='/login/')
+def time(request):
+	try:
+		user = Person.objects.get(user=request.user);
+	except Exception, e:
+		return render(request,'error.html',{"error":"Users uknown or not loged in, please login","login":True})
+
+	currentProject = WorkSession.objects.all().filter(person=user,completed=False)
+	return render(request,'time.html',{
+		"user":user,
+		"current":currentProject,
+		"projects":Project.objects.all().order_by('name'),
+		"worksession":WorkSession.objects.all(),
+		"worktypes":WorkTypes.objects.all(),
+		"spreadsheet":getActiveSheetURL()}
+		)
 
 def people(request):
 	out = []
@@ -44,8 +65,11 @@ def project(request):
 
 def stopTimmer(request):
 	pause = request.POST.get('pause')
-	name = request.POST.get('name')
-	person = Person.objects.get(pk=name);
+	# name = request.POST.get('name')
+	try:
+		person = Person.objects.get(user=request.user);
+	except Exception, e:
+		return render(request,'error.html',{"error":"Users uknown or not loged in, please login"})
 
 	projectsOnTheGo = WorkSession.objects.all().filter(person=person,completed=False)
 	if(not projectsOnTheGo):
@@ -59,10 +83,11 @@ def stopTimmer(request):
 			projectsOnTheGo.pauseEnd = float(request.POST.get('time'))
 			projectsOnTheGo.pauseLength()
 		else:
-			print "\tpausestart"			
+			print "\tpausestart"
+			print request.POST.get('time')
 			projectsOnTheGo.pauseStart = float(request.POST.get('time'))
 			projectsOnTheGo.save()
-		return redirect("/")
+		return redirect("/time/")
 
 	projectsOnTheGo.endTimeFloat = float(request.POST.get('time'))
 
@@ -70,18 +95,21 @@ def stopTimmer(request):
 		projectsOnTheGo.pauseEnd = projectsOnTheGo.endTimeFloat
 		projectsOnTheGo.pauseLength()
 
+	projectsOnTheGo.exiting_notes = request.POST.get('workingnotes')
 	projectsOnTheGo.completed = True
 	projectsOnTheGo.save()
 
 	person.generatePersonPage()
-	return redirect("/")
+	return redirect("/time/")
 
 
 def startTimmer(request):
 	#datetime.datetime.fromtimestamp(float(request.POST.get('time')))
-
-	name = request.POST.get('name')
-	person = Person.objects.get(pk=name);
+	# name = request.user.username#request.POST.get('name')
+	try:
+		person = Person.objects.get(user=request.user);
+	except Exception, e:
+		return render(request,'error.html',{"error":"Users uknown or not loged in, please login"})
 
 	#test if person is in work session already...
 	projectsOnTheGo = WorkSession.objects.all().filter(person=person,completed=False)
@@ -93,8 +121,6 @@ def startTimmer(request):
 	message = request.POST.get('task')
 	time = float(request.POST.get('time'))
 	workType = request.POST.get('worktype')
-	print "\n\n\n\n\n!!!!!!!!"
-	print workType
 	if not workType:
 		workType = None
 	else:
@@ -109,7 +135,7 @@ def startTimmer(request):
 	w.save()
 
 	person.generatePersonPage()
-	return redirect("/")
+	return redirect("/time/")
 
 @login_required(login_url='/login/')
 def view_people(request):
@@ -140,5 +166,3 @@ def view_project(request):
 			});
 
 	return render(request,'optionlist.html',{"page":"project","data":Project.objects.all().order_by('name'),"spreadsheet":getActiveSheetURL()})
-
-

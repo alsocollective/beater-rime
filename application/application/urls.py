@@ -6,10 +6,12 @@ from django.conf.urls.static import static
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'timetrack.views.home', name='home'),
+    url(r'^time/', 'timetrack.views.time', name='home'),    
     url(r'^people/', 'timetrack.views.view_people', name='home'),
     url(r'^project/', 'timetrack.views.view_project', name='home'),
     url(r'^api/',include('timetrack.urls')),
 	url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}),
+	url(r'^logout/$','django.contrib.auth.views.logout'),
 
     # url(r'^blog/', include('blog.urls')),
 

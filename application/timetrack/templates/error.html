@@ -4,5 +4,11 @@
 {% block content %}
 	{{error}}
 	<br>
-	<a href="/">home</a>
+	{% if login %}
+		<a href="/login/">login</a>
+	{% else %}
+		<a href="/">home</a>
+	{% endif %}
+	{% include "footer.html" %}
+
 {% endblock %}

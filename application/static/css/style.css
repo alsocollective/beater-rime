@@ -59,6 +59,43 @@ tr:first-child {
 #wrapper {
   text-align: center; }
 
+.optionlist {
+  width: 50%;
+  max-width: 400px;
+  display: inline-block;
+  border-top: solid 1px #ccc;
+  border-bottom: solid 1px #ccc;
+  padding: 0; }
+  .optionlist a {
+    color: inherit;
+    text-decoration: none;
+    display: block;
+    width: 100%; }
+  .optionlist li {
+    text-align: left;
+    list-style: none; }
+    .optionlist li a {
+      display: inline-block;
+      padding: 0.5em; }
+    .optionlist li:nth-child(2n) {
+      background-color: #ccc; }
+    .optionlist li:hover {
+      background-color: #E4F4FA; }
+
+#adminpage tr:nth-child(2n) {
+  background-color: #fff; }
+
+.footer {
+  margin-top: 3em;
+  padding-bottom: 3em; }
+  .footer a {
+    color: inherit;
+    text-decoration: none;
+    display: inline-block;
+    padding: 0.5em; }
+    .footer a:hover {
+      background-color: #E4F4FA; }
+
 .worktypes {
   width: 50%;
   margin: 0 auto;
@@ -71,6 +108,10 @@ tr:first-child {
 
 #user, #project, #notes {
   display: block; }
+
+#notes, #workingnotes {
+  width: 50%;
+  height: 150px; }
 
 #time {
   display: none;
@@ -133,36 +174,3 @@ tr:first-child {
 #worked {
   font-size: 2em;
   padding: 0.5em 0 0em 0; }
-
-.optionlist {
-  width: 50%;
-  max-width: 400px;
-  display: inline-block;
-  border-top: solid 1px #ccc;
-  border-bottom: solid 1px #ccc;
-  padding: 0; }
-  .optionlist a {
-    color: inherit;
-    text-decoration: none; }
-  .optionlist li {
-    text-align: left;
-    list-style: none; }
-    .optionlist li a {
-      display: inline-block;
-      padding: 0.5em; }
-    .optionlist li:nth-child(2n) {
-      background-color: #ccc; }
-
-.footer {
-  margin-top: 3em;
-  padding-bottom: 3em; }
-  .footer a {
-    color: inherit;
-    text-decoration: none;
-    display: inline-block;
-    padding: 0.5em; }
-    .footer a:hover {
-      background-color: #ccc; }
-
-#adminpage tr:nth-child(2n) {
-  background-color: #fff; }
