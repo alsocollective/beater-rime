@@ -40,7 +40,7 @@
 			</div>
 			<div class="worktypes">
 			{% for worktype in worktypes %}
-				<span class="worktypecontainer">{{worktype}}<input class="worktype" type="radio" name="worktype" value="{{worktype.slug}}"></span>
+				<span class="worktypecontainer"><label for="lable-{{worktype.slug}}">{{worktype}}</label><input class="worktype" type="radio" name="worktype" value="{{worktype.slug}}" id="lable-{{worktype.slug}}"></span>
 			{% endfor %}		
 			</div>
 			<div class="formated">
