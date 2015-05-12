@@ -144,6 +144,7 @@ class WorkTypes(models.Model):
 		super(WorkTypes, self).save(*args, **kwargs)
 	def __unicode__(self):
 		return self.name
+
 class WorkSession(models.Model):
 	person = models.ForeignKey(Person)
 	project = models.ForeignKey(Project)

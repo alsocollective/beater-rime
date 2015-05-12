@@ -11,7 +11,7 @@
 			{% if active.0.workTypes %}<td>{{active.0.workTypes}}</td>{% endif %}
 			<td>{{active.0.notes}}</td>
 			<td>{{active.0.startTime|date:"G:i - j - N"}}</td>
-			<td><a href="/admin/timetrack/worksession/{{active.0.pk}}/">Edit</a></td>
+			<td><a href="/edit/?id={{active.0.pk}}">Edit</a></td>
 		</tr>
 	</table>
 {% else %}
@@ -39,7 +39,7 @@
 			<td>{{session.totalhourstext}}</td>
 			<td>{{session.startTime|date:"G:i - j - n"}}</td>
 			<td>{{session.endTime|date:"G:i - j - n"}}</td>
-			<td><a href="/admin/timetrack/worksession/{{session.pk}}/">Edit</a></td>
+			<td><a href="/edit/?id={{session.pk}}">Edit</a></td>
 		</tr>
 	{% endfor %}
 </table>

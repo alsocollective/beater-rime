@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block pageID%}loginpage{% endblock %}
+
+{% block header %}
+<link rel="stylesheet" type="text/css" href="{% static "css/jquery.datetimepicker.css" %}"/ >
+{% endblock %}
+
+{% block content %}
+<div class="edit">
+	<a href="http://xdsoft.net/jqplugins/datetimepicker/">time calander reference</a>
+	{{workSession}}
+	<form>
+		<input type="number" value="{{workSession.startTimeFloat}}" name="startTime">
+		<input type="number" value="{{workSession.endTimeFloat}}" name="endTime">
+		<input id="datetimepicker" type="text" >
+		<br>
+		<textarea name="startNotes"></textarea>
+		<br>
+		<textarea name="endNotes"></textarea>
+	</form>
+	<br>
+	{{workSession.project}}
+	{% include "footer.html" %}
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="{% static "js/jquery.datetimepicker.js" %}"></script>
+<script type="text/javascript">
+jQuery('#datetimepicker').datetimepicker();
+</script>
+{% endblock %}

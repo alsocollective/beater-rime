@@ -166,3 +166,15 @@ def view_project(request):
 			});
 
 	return render(request,'optionlist.html',{"page":"project","data":Project.objects.all().order_by('name'),"spreadsheet":getActiveSheetURL()})
+
+@login_required(login_url='/login/')
+def view_edit(request):
+	workSessionID = request.GET.get('id')
+	if(workSessionID != None):
+		workSession = WorkSession.objects.get(pk=int(workSessionID))
+
+		return render(request,"editWorkSession.html",{
+			"workSession":workSession
+			});
+
+	return render(request,'optionlist.html',{"page":"project","data":Project.objects.all().order_by('name'),"spreadsheet":getActiveSheetURL()})
