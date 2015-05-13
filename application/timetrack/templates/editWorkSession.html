@@ -16,13 +16,15 @@
 	{% endif %}
 	<form action="/edit/?id={{workSession.pk}}" method="post" class="formated">{% csrf_token %}
 		<input class="hidden" value="{{workSession.pk}}" name="id" style="display:none;">
-		<input type="number" value="{{workSession.startTimeFloat}}" name="startTime" id="startTime">
+		<label style="display:inline-block;padding: 10px 15px; margin: 10px auto;" for="startTime">Start Time:</label><input type="number" value="{{workSession.startTimeFloat}}" name="startTime" id="startTime">
+		<br>
+		<label style="display:inline-block;padding: 10px 15px; margin: 10px auto;" for="endTime">End Time:</label><input type="number" value="{{workSession.endTimeFloat}}" name="endTime" id="endTime">
 		<br><br>
-		<input type="number" value="{{workSession.endTimeFloat}}" name="endTime" id="endTime">
+		<h3>Starting Notes</h3>
+		<textarea id="notes" name="notes">{{workSession.notes}}</textarea>
 		<br>
-		<textarea name="notes">{{workSession.notes}}</textarea>
-		<br>
-		<textarea name="exiting_notes">{{workSession.exiting_notes}}</textarea>
+		<h3>Ending Notes</h3>
+		<textarea id="notes" name="exiting_notes">{{workSession.exiting_notes}}</textarea>
 		<br>
 		<input type="submit" value="Commit Edits">
 	</form>
