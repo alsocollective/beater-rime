@@ -28,7 +28,7 @@ select, button, .formated input, textarea {
 table {
   margin: 0 auto;
   margin-top: 2em;
-  max-width: 80%;
+  width: 80%;
   text-align: left; }
   table .notes {
     text-align: left;

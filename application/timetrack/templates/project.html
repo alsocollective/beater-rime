@@ -21,29 +21,36 @@
 	<h3>No one is currently working on this project</h3>
 {% endif %}
 				
-<table>
+
+{% for session in worksessions %}
+	{% ifchanged session.startTime|date:"n" %}
+		{% if forloop.first == False %}
+			</table>	
+		{% endif %}
+		<h2>{{session.startTime|date:"F Y"}}</h2>			
+		<table>
+			<tr>
+				<th>Person</th>
+				<th>WorkTypes</th>
+				<th>Notes</th>
+				<th>Notes End</th>
+				<th>Total Time</th>
+				<th>Start Time</th>
+				<th>End Time</th>
+				<th>Edit</th>
+			</tr>
+	{% endifchanged %}
 	<tr>
-		<th>Person</th>
-		<th>WorkTypes</th>
-		<th>Notes</th>
-		<th>Notes End</th>
-		<th>Total Time</th>
-		<th>Start Time</th>
-		<th>End Time</th>
-		<th>Edit</th>
+		<td><a href="/people/?id={{session.person.pk}}">{{session.person}}</a></td>
+		<td>{% if session.workTypes %}{{session.workTypes}}{% endif %}</td>	
+		<td class="notes">{{session.notes}}</td>
+		<td class="notes">{% if session.exiting_notes %}{{session.exiting_notes}}{% endif %}</td>			
+		<td>{{session.totalhourstext}}</td>
+		<td>{{session.startTime|date:"G:i - j - n"}}</td>
+		<td>{{session.endTime|date:"G:i - j - n"}}</td>
+		<td><a href="/edit/?id={{session.pk}}">Edit</a></td>
 	</tr>
-	{% for session in worksessions %}
-		<tr>
-			<td>{{session.person}}</td>
-			<td>{% if session.workTypes %}{{session.workTypes}}{% endif %}</td>	
-			<td class="notes">{{session.notes}}</td>
-			<td class="notes">{% if session.exiting_notes %}{{session.exiting_notes}}{% endif %}</td>			
-			<td>{{session.totalhourstext}}</td>
-			<td>{{session.startTime|date:"G:i - j - n"}}</td>
-			<td>{{session.endTime|date:"G:i - j - n"}}</td>
-			<td><a href="/edit/?id={{session.pk}}">Edit</a></td>
-		</tr>
-	{% endfor %}
+{% endfor %}
 </table>
 
 {% include "footer.html" %}

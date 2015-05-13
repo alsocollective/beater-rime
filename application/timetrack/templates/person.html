@@ -19,20 +19,27 @@
 {% endif %}
 
 
-<table>
-	<tr>
-		<th>Project</th>
-		<th>WorkTypes</th>
-		<th>Notes</th>
-		<th>Notes End</th>		
-		<th>Total Time</th>
-		<th>Start Time</th>
-		<th>End Time</th>
-		<th>Edit</th>
-	</tr>
 	{% for session in worksessions %}
+		{% ifchanged session.startTime|date:"n" %}
+			{% if forloop.first == False %}
+				</table>	
+			{% endif %}
+			
+			<h2>{{session.startTime|date:"F Y"}}</h2>			
+			<table>
+			<tr>
+				<th>Project</th>
+				<th>WorkTypes</th>
+				<th>Notes</th>
+				<th>Notes End</th>		
+				<th class="totalTime">Total Time</th>
+				<th>Start Time</th>
+				<th>End Time</th>
+				<th>Edit</th>
+			</tr>			
+		{% endifchanged %}
 		<tr>
-			<td>{{session.project}}</td>
+			<td><a href="/project/?id={{session.project.pk}}">{{session.project}}</a></td>
 			<td>{% if session.workTypes %}{{session.workTypes}}{% endif %}</td>	
 			<td class="notes">{{session.notes}}</td>
 			<td class="notes">{% if session.exiting_notes %}{{session.exiting_notes}}{% endif %}</td>
