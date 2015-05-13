@@ -170,11 +170,26 @@ def view_project(request):
 @login_required(login_url='/login/')
 def view_edit(request):
 	workSessionID = request.GET.get('id')
+	isPost = request.POST.get('id')
+	print("\n\n==")
+	print(isPost)
+	if(isPost and workSessionID != None):
+		workSession = WorkSession.objects.get(pk=int(workSessionID))
+		workSession.startTimeFloat = float(request.POST.get('startTime'))
+		workSession.endTimeFloat = float(request.POST.get('endTime'))
+		workSession.notes = request.POST.get('notes')
+		workSession.exiting_notes = request.POST.get('exiting_notes')
+		workSession.save()
+		return render(request,"editWorkSession.html",{
+			"workSession":workSession,
+			"saved":True
+			});
 	if(workSessionID != None):
 		workSession = WorkSession.objects.get(pk=int(workSessionID))
 
 		return render(request,"editWorkSession.html",{
-			"workSession":workSession
+			"workSession":workSession,
+			"saved":False
 			});
 
 	return render(request,'optionlist.html',{"page":"project","data":Project.objects.all().order_by('name'),"spreadsheet":getActiveSheetURL()})

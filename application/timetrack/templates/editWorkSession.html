@@ -9,19 +9,24 @@
 
 {% block content %}
 <div class="edit">
-	<a href="http://xdsoft.net/jqplugins/datetimepicker/">time calander reference</a>
-	{{workSession}}
-	<form>
-		<input type="number" value="{{workSession.startTimeFloat}}" name="startTime">
-		<input type="number" value="{{workSession.endTimeFloat}}" name="endTime">
-		<input id="datetimepicker" type="text" >
+	<h1><br></h1>
+	<h1>{{workSession.person}} working on {{workSession.project}}</h1>
+	{% if saved %}
+		<h2>Just Saved!</h2>
+	{% endif %}
+	<form action="/edit/?id={{workSession.pk}}" method="post" class="formated">{% csrf_token %}
+		<input class="hidden" value="{{workSession.pk}}" name="id" style="display:none;">
+		<input type="number" value="{{workSession.startTimeFloat}}" name="startTime" id="startTime">
+		<br><br>
+		<input type="number" value="{{workSession.endTimeFloat}}" name="endTime" id="endTime">
 		<br>
-		<textarea name="startNotes"></textarea>
+		<textarea name="notes">{{workSession.notes}}</textarea>
 		<br>
-		<textarea name="endNotes"></textarea>
+		<textarea name="exiting_notes">{{workSession.exiting_notes}}</textarea>
+		<br>
+		<input type="submit" value="Commit Edits">
 	</form>
 	<br>
-	{{workSession.project}}
 	{% include "footer.html" %}
 </div>
 {% endblock %}
@@ -29,6 +34,16 @@
 {% block script %}
 <script src="{% static "js/jquery.datetimepicker.js" %}"></script>
 <script type="text/javascript">
-jQuery('#datetimepicker').datetimepicker();
+
+	jQuery('#startTime').datetimepicker({
+		format:'unixtime',
+		startDate:new Date({{workSession.startTimeFloat}} * 1000),
+		step:5
+	});
+	jQuery('#endTime').datetimepicker({
+		format:'unixtime',
+		startDate:new Date({{workSession.endTimeFloat}} * 1000),
+		step:5
+	});	
 </script>
 {% endblock %}
