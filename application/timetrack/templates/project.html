@@ -40,14 +40,15 @@
 				<th>Edit</th>
 			</tr>
 	{% endifchanged %}
+	{% ifchanged session.startTime|date:"j" %}<b>{% endifchanged %}
 	<tr>
 		<td><a href="/people/?id={{session.person.pk}}">{{session.person}}</a></td>
 		<td>{% if session.workTypes %}{{session.workTypes}}{% endif %}</td>	
 		<td class="notes">{{session.notes}}</td>
 		<td class="notes">{% if session.exiting_notes %}{{session.exiting_notes}}{% endif %}</td>			
 		<td>{{session.totalhourstext}}</td>
-		<td>{{session.startTime|date:"G:i - j - n"}}</td>
-		<td>{{session.endTime|date:"G:i - j - n"}}</td>
+		<td>{% ifchanged session.startTime|date:"j" %}<b>{% endifchanged %}{{session.startTime|date:"G:i - j - n"}}{% ifchanged session.startTime|date:"j" %}</b>{% endifchanged %}</td>
+		<td>{% ifchanged session.startTime|date:"j" %}<b>{% endifchanged %}{{session.endTime|date:"G:i - j - n"}}{% ifchanged session.startTime|date:"j" %}</b>{% endifchanged %}</td>
 		<td><a href="/edit/?id={{session.pk}}">Edit</a></td>
 	</tr>
 {% endfor %}
