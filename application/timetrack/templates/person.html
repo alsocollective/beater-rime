@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load bohdan_filters %}
 
 {% block content %}
 <h1>{{person}}</h1>
@@ -43,7 +44,7 @@
 			<td>{% if session.workTypes %}{{session.workTypes}}{% endif %}</td>	
 			<td class="notes">{{session.notes}}</td>
 			<td class="notes">{% if session.exiting_notes %}{{session.exiting_notes}}{% endif %}</td>
-			<td>{{session.totalhourstext}}</td>
+			<td>{{session.totalhourstext}}|{{session.totalhours|hours}}</td>
 			<td>{% ifchanged session.startTime|date:"j" %}<b>{% endifchanged %}{{session.startTime|date:"G:i - j - n"}}{% ifchanged session.startTime|date:"j" %}</b>{% endifchanged %}</td>
 			<td>{% ifchanged session.startTime|date:"j" %}<b>{% endifchanged %}{{session.endTime|date:"G:i - j - n"}}{% ifchanged session.startTime|date:"j" %}</b>{% endifchanged %}</td>
 			<td><a href="/edit/?id={{session.pk}}">Edit</a></td>

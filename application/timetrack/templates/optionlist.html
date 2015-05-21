@@ -11,6 +11,15 @@
 	{% endfor %}
 </ul>
 
+{% if data_complete %}
+<h1>Complete</h1>
+	<ul class="optionlist">
+		{% for item in data_complete %}
+			<li><a href="/{{page}}/?id={{item.pk}}">{{item}}</a></li>
+		{% endfor %}
+	</ul>
+{% endif %}
+
 {% include "footer.html" %}
 
 {% endblock %}

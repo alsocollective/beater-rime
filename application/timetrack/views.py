@@ -34,7 +34,7 @@ def time(request):
 	return render(request,'time.html',{
 		"user":user,
 		"current":currentProject,
-		"projects":Project.objects.all().order_by('name'),
+		"projects":Project.objects.all().filter(completed=False).order_by('name'),
 		"worksession":WorkSession.objects.all(),
 		"worktypes":WorkTypes.objects.all(),
 		"spreadsheet":getActiveSheetURL()}
@@ -165,7 +165,12 @@ def view_project(request):
 			"spreadsheet":getActiveSheetURL()
 			});
 
-	return render(request,'optionlist.html',{"page":"project","data":Project.objects.all().order_by('name'),"spreadsheet":getActiveSheetURL()})
+	return render(request,'optionlist.html',{
+		"page":"project",
+		"data":Project.objects.all().order_by('name').filter(completed=False),
+		"data_complete":Project.objects.all().order_by('name').filter(completed=True),
+		"spreadsheet":getActiveSheetURL()
+		})
 
 @login_required(login_url='/login/')
 def view_edit(request):
