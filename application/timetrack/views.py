@@ -99,7 +99,7 @@ def stopTimmer(request):
 	projectsOnTheGo.completed = True
 	projectsOnTheGo.save()
 
-	person.generatePersonPage()
+	# person.generatePersonPage()
 	return redirect("/time/")
 
 
@@ -134,7 +134,7 @@ def startTimmer(request):
 		)
 	w.save()
 
-	person.generatePersonPage()
+	# person.generatePersonPage()
 	return redirect("/time/")
 
 @login_required(login_url='/login/')
@@ -158,11 +158,29 @@ def view_project(request):
 	if(projectID != None):
 		project = Project.objects.get(pk=int(projectID))
 
+		sessions = WorkSession.objects.all().filter(project=project,completed=True).order_by('-endTime')
+		timeCounter = 0
+		time = []
+		date = sessions[0].startTime.date().month
+		total = 0
+		for ses in sessions:
+			if date != ses.startTime.date().month:
+				time.append({"m":date, "t":timeCounter})
+				total += timeCounter
+				date = ses.startTime.date().month
+				timeCounter = 0
+			timeCounter += ses.totalhours
+		if timeCounter > 0:
+			time.append({"m":date, "t":timeCounter})
+			total += timeCounter
+
 		return render(request,"project.html",{
 			"project":project,
-			"worksessions":WorkSession.objects.all().filter(project=project,completed=True).order_by('-endTime'),
+			"worksessions":sessions,
 			"active":WorkSession.objects.all().filter(project=project,completed=False),
-			"spreadsheet":getActiveSheetURL()
+			"spreadsheet":getActiveSheetURL(),
+			"timeMonth":time,
+			"timeTotal":total
 			});
 
 	return render(request,'optionlist.html',{

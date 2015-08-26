@@ -3,7 +3,7 @@
 {% load bohdan_filters %}
 
 {% block content %}
-<h1>{{project}}</h1>
+<h1>{{project}} - {{timeTotal|hours}}</h1>
 
 
 {% if active.0 %}
@@ -21,14 +21,13 @@
 {% else %}
 	<h3>No one is currently working on this project</h3>
 {% endif %}
-				
 
 {% for session in worksessions %}
 	{% ifchanged session.startTime|date:"n" %}
 		{% if forloop.first == False %}
 			</table>	
 		{% endif %}
-		<h2>{{session.startTime|date:"F Y"}}</h2>			
+		<h2>{{session.startTime|date:"F Y"}} - {% for t in timeMonth %}{% if t.m == session.startTime.month %}{{t.t|hours}}{% endif %}{% endfor %}</h2>		
 		<table>
 			<tr>
 				<th>Person</th>
