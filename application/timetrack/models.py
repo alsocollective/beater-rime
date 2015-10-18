@@ -1,6 +1,6 @@
 from django.db import models
 from django.template.defaultfilters import slugify
-import gspread,thread,datetime
+import thread,datetime
 from application.settings import Googlelogin
 from django.contrib.auth.models import User
 

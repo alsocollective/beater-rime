@@ -143,41 +143,41 @@ def view_people(request):
 
 	return render(request,'optionlist.html',{"page":"people","data":Person.objects.all().order_by('name')})
 
-@login_required(login_url='/login/')
-def view_project(request):
-	projectID = request.GET.get('id')
-	if(projectID != None):
-		project = Project.objects.get(pk=int(projectID))
+# @login_required(login_url='/login/')
+# def view_project(request):
+# 	projectID = request.GET.get('id')
+# 	if(projectID != None):
+# 		project = Project.objects.get(pk=int(projectID))
 
-		sessions = WorkSession.objects.all().filter(project=project,completed=True).order_by('-endTime')
-		timeCounter = 0
-		time = []
-		date = sessions[0].startTime.date().month
-		total = 0
-		for ses in sessions:
-			if date != ses.startTime.date().month:
-				time.append({"m":date, "t":timeCounter})
-				total += timeCounter
-				date = ses.startTime.date().month
-				timeCounter = 0
-			timeCounter += ses.totalhours
-		if timeCounter > 0:
-			time.append({"m":date, "t":timeCounter})
-			total += timeCounter
+# 		sessions = WorkSession.objects.all().filter(project=project,completed=True).order_by('-endTime')
+# 		timeCounter = 0
+# 		time = []
+# 		date = sessions[0].startTime.date().month
+# 		total = 0
+# 		for ses in sessions:
+# 			if date != ses.startTime.date().month:
+# 				time.append({"m":date, "t":timeCounter})
+# 				total += timeCounter
+# 				date = ses.startTime.date().month
+# 				timeCounter = 0
+# 			timeCounter += ses.totalhours
+# 		if timeCounter > 0:
+# 			time.append({"m":date, "t":timeCounter})
+# 			total += timeCounter
 
-		return render(request,"project.html",{
-			"project":project,
-			"worksessions":sessions,
-			"active":WorkSession.objects.all().filter(project=project,completed=False),
-			"timeMonth":time,
-			"timeTotal":total
-			});
+# 		return render(request,"project.html",{
+# 			"project":project,
+# 			"worksessions":sessions,
+# 			"active":WorkSession.objects.all().filter(project=project,completed=False),
+# 			"timeMonth":time,
+# 			"timeTotal":total
+# 			});
 
-	return render(request,'optionlist.html',{
-		"page":"project",
-		"data":Project.objects.all().order_by('name').filter(completed=False),
-		"data_complete":Project.objects.all().order_by('name').filter(completed=True),
-		})
+# 	return render(request,'optionlist.html',{
+# 		"page":"project",
+# 		"data":Project.objects.all().order_by('name').filter(completed=False),
+# 		"data_complete":Project.objects.all().order_by('name').filter(completed=True),
+# 		})
 
 @login_required(login_url='/login/')
 def view_edit(request):

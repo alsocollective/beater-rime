@@ -18,3 +18,5 @@ settings.py
 public_html
 public
 migrations/*
+application/projecttrack/migrations/*
+application/timetrack/migrations/*
