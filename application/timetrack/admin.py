@@ -7,6 +7,5 @@ class workAdmin(admin.ModelAdmin):
 
 admin.site.register(Person)
 admin.site.register(Project)
-admin.site.register(SpreadSheet)
 admin.site.register(WorkTypes)
 admin.site.register(WorkSession,workAdmin)

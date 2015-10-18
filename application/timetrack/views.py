@@ -9,19 +9,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 
 
-def getActiveSheetURL():
-	try:
-		return SpreadSheet.objects.get(active=True).url
-	except Exception, e:
-		print e
-		return "/"
+
 
 @login_required(login_url='/login/')
 def home(request):
 
-	return render(request,'index.html',{
-		"spreadsheet":getActiveSheetURL()
-		})
+	return render(request,'index.html')
 
 @login_required(login_url='/login/')
 def time(request):
@@ -36,8 +29,7 @@ def time(request):
 		"current":currentProject,
 		"projects":Project.objects.all().filter(completed=False).order_by('name'),
 		"worksession":WorkSession.objects.all(),
-		"worktypes":WorkTypes.objects.all(),
-		"spreadsheet":getActiveSheetURL()}
+		"worktypes":WorkTypes.objects.all()}
 		)
 
 def people(request):
@@ -146,11 +138,10 @@ def view_people(request):
 		return render(request,"person.html",{
 			"person":person,
 			"worksessions":WorkSession.objects.all().filter(person=person,completed=True).order_by('-endTime'),
-			"active":WorkSession.objects.all().filter(person=person,completed=False),
-			"spreadsheet":getActiveSheetURL()
+			"active":WorkSession.objects.all().filter(person=person,completed=False)
 			});
 
-	return render(request,'optionlist.html',{"page":"people","data":Person.objects.all().order_by('name'),"spreadsheet":getActiveSheetURL()})
+	return render(request,'optionlist.html',{"page":"people","data":Person.objects.all().order_by('name')})
 
 @login_required(login_url='/login/')
 def view_project(request):
@@ -178,7 +169,6 @@ def view_project(request):
 			"project":project,
 			"worksessions":sessions,
 			"active":WorkSession.objects.all().filter(project=project,completed=False),
-			"spreadsheet":getActiveSheetURL(),
 			"timeMonth":time,
 			"timeTotal":total
 			});
@@ -187,7 +177,6 @@ def view_project(request):
 		"page":"project",
 		"data":Project.objects.all().order_by('name').filter(completed=False),
 		"data_complete":Project.objects.all().order_by('name').filter(completed=True),
-		"spreadsheet":getActiveSheetURL()
 		})
 
 @login_required(login_url='/login/')
@@ -215,4 +204,4 @@ def view_edit(request):
 			"saved":False
 			});
 
-	return render(request,'optionlist.html',{"page":"project","data":Project.objects.all().order_by('name'),"spreadsheet":getActiveSheetURL()})
+	return render(request,'optionlist.html',{"page":"project","data":Project.objects.all().order_by('name')})
