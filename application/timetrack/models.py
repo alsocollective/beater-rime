@@ -29,7 +29,7 @@ class Person(models.Model):
 	# sheet = models.ForeignKey(SpreadSheet,blank=True,null=True)
 	lastProject = models.ForeignKey("Project",blank=True,null=True)
 
-	active = models.BooleanField(default=False)
+	# active = models.BooleanField(default=False)
 
 
 	def save(self,*args, **kwargs):
