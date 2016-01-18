@@ -26,7 +26,7 @@ class Person(models.Model):
 	slug = models.SlugField(blank=True)
 	user = models.OneToOneField(User,blank=True,null=True)
 
-	# sheet = models.ForeignKey(SpreadSheet,blank=True,null=True)
+	sheet = models.ForeignKey(SpreadSheet,blank=True,null=True)
 	lastProject = models.ForeignKey("Project",blank=True,null=True)
 
 	# active = models.BooleanField(default=False)
@@ -53,7 +53,7 @@ class Project(models.Model):
 	name = models.CharField(max_length=500)
 	completed = models.BooleanField(default=False)
 	slug = models.SlugField(blank=True)
-	# sheet = models.ForeignKey(SpreadSheet,blank=True,null=True)
+	sheet = models.ForeignKey(SpreadSheet,blank=True,null=True)
 	notes  = models.TextField(blank=True, null=True,max_length=2000)
 
 	def save(self,*args, **kwargs):
@@ -99,7 +99,7 @@ class WorkSession(models.Model):
 	totalhours = models.FloatField(blank=True, null=True)
 	totalhourstext = models.CharField(max_length=200,blank=True,null=True)
 	workTypes = models.ForeignKey(WorkTypes,blank=True,null=True)
-	# sheet = models.ForeignKey(SpreadSheet,blank=True,null=True)
+	sheet = models.ForeignKey(SpreadSheet,blank=True,null=True)
 
 	def save(self,*args, **kwargs):
 		self.startTime = datetime.datetime.fromtimestamp(self.startTimeFloat)
