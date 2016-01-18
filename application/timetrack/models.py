@@ -1,33 +1,36 @@
 from django.db import models
 from django.template.defaultfilters import slugify
-import gspread,thread,datetime
+import thread,datetime
 from application.settings import Googlelogin
 from django.contrib.auth.models import User
 
 def println(text):
 	print "\n\t%s\n"%text
 
-class SpreadSheet(models.Model):
-	name = models.CharField(max_length=1000)
-	slug = models.SlugField(blank=True)
-	active = models.BooleanField(default=False)
-	url = models.CharField(max_length=2000,blank=True)
+# class SpreadSheet(models.Model):
+# 	name = models.CharField(max_length=1000)
+# 	slug = models.SlugField(blank=True)
+# 	active = models.BooleanField(default=False)
+# 	url = models.CharField(max_length=2000,blank=True)
 
-	def save(self,*args, **kwargs):
-		self.slug = slugify(self.name)
-		# self.getURL()
-		super(SpreadSheet, self).save(*args, **kwargs)
+# 	def save(self,*args, **kwargs):
+# 		self.slug = slugify(self.name)
+# 		# self.getURL()
+# 		super(SpreadSheet, self).save(*args, **kwargs)
 
-	def __unicode__(self):
-		return self.name
+# 	def __unicode__(self):
+# 		return self.name
 
 class Person(models.Model):
 	name = models.CharField(max_length=500)
 	slug = models.SlugField(blank=True)
 	user = models.OneToOneField(User,blank=True,null=True)
 
-	sheet = models.ForeignKey(SpreadSheet,blank=True,null=True)
+	# sheet = models.ForeignKey(SpreadSheet,blank=True,null=True)
 	lastProject = models.ForeignKey("Project",blank=True,null=True)
+
+	active = models.BooleanField(default=False)
+
 
 	def save(self,*args, **kwargs):
 		self.slug = slugify(self.name)
@@ -35,11 +38,12 @@ class Person(models.Model):
 		# self.setSheet()
 		super(Person, self).save(*args, **kwargs)
 	
-	def setSheet(self):
-		try:
-			self.sheet = SpreadSheet.objects.get(active=True)
-		except Exception, e:
-			print e
+	# def setSheet(self):
+		# try:
+			# self.sheet = SpreadSheet.objects.get(active=True)
+		# except Exception, e:
+			# print e
+		# pass
 
 
 	def __unicode__(self):
@@ -49,7 +53,7 @@ class Project(models.Model):
 	name = models.CharField(max_length=500)
 	completed = models.BooleanField(default=False)
 	slug = models.SlugField(blank=True)
-	sheet = models.ForeignKey(SpreadSheet,blank=True,null=True)
+	# sheet = models.ForeignKey(SpreadSheet,blank=True,null=True)
 	notes  = models.TextField(blank=True, null=True,max_length=2000)
 
 	def save(self,*args, **kwargs):
@@ -95,7 +99,7 @@ class WorkSession(models.Model):
 	totalhours = models.FloatField(blank=True, null=True)
 	totalhourstext = models.CharField(max_length=200,blank=True,null=True)
 	workTypes = models.ForeignKey(WorkTypes,blank=True,null=True)
-	sheet = models.ForeignKey(SpreadSheet,blank=True,null=True)
+	# sheet = models.ForeignKey(SpreadSheet,blank=True,null=True)
 
 	def save(self,*args, **kwargs):
 		self.startTime = datetime.datetime.fromtimestamp(self.startTimeFloat)
