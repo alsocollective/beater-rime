@@ -7,11 +7,11 @@ from django.contrib.auth.models import User
 def println(text):
 	print "\n\t%s\n"%text
 
-# class SpreadSheet(models.Model):
-# 	name = models.CharField(max_length=1000)
-# 	slug = models.SlugField(blank=True)
-# 	active = models.BooleanField(default=False)
-# 	url = models.CharField(max_length=2000,blank=True)
+class SpreadSheet(models.Model):
+	name = models.CharField(max_length=1000)
+	slug = models.SlugField(blank=True)
+	active = models.BooleanField(default=False)
+	url = models.CharField(max_length=2000,blank=True)
 
 # 	def save(self,*args, **kwargs):
 # 		self.slug = slugify(self.name)
